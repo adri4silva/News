@@ -20,7 +20,6 @@ public final class NewsClient {
                 guard let data = data else { return }
                 do {
                     let model = try JSONDecoder().decode(TopHeadlines.self, from: data)
-                    print(model.articles)
                     observer.onNext(model)
                 } catch let error {
                     observer.onError(error)

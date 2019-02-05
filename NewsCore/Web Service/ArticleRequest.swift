@@ -15,11 +15,11 @@ public class ArticlesRequest: Request {
     
     public var parameters = [String : String]()
     
-    public init(country: String = "us",
-                category: String = "",
-                date: String = "",
-                pageSize: String = "5",
-                page: String = "1")
+    internal init(country: String,
+                category: String,
+                date: String,
+                pageSize: String,
+                page: String)
     {
         parameters["country"] = country
         parameters["category"] = category
