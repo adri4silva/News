@@ -16,7 +16,7 @@ protocol TodayListViewModelInputs {
 }
 
 protocol TodayListViewModelOutputs {
-    var articles: Observable<[TodayCellViewModel]> { get }
+    var articles: Observable<[ArticleViewModel]> { get }
 }
 
 protocol TodayListViewModelType {
@@ -26,15 +26,14 @@ protocol TodayListViewModelType {
 
 final class TodayListViewModel {
 
-    let articles: Observable<[TodayCellViewModel]>
+    let articles: Observable<[ArticleViewModel]>
     
-    init(client: NewsClient, request: Request) {
-        articles = client.send(request: request).map { headlines -> [TodayCellViewModel] in
-            let articles = headlines.articles
-            return articles.map {
-                TodayCellViewModel(article: $0)
-            }
-        }
+    init(todayRepository: TodayRepositoryProtocol) {
+        self.articles = todayRepository.todayCellViewModels(country: "us",
+                                                            category: "",
+                                                            date: "",
+                                                            pageSize: "10",
+                                                            page: "1")
     }
 }
 

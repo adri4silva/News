@@ -22,11 +22,13 @@ class TodayListViewController: UIViewController {
     }
     
     private let viewModel: TodayListViewModelType
+    private let detailNavigator: DetailNavigatorProtocol
     
     private let disposeBag = DisposeBag()
     
-    init(viewModel: TodayListViewModelType) {
+    init(viewModel: TodayListViewModelType, detailNavigator: DetailNavigatorProtocol) {
         self.viewModel = viewModel
+        self.detailNavigator = detailNavigator
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -64,6 +66,7 @@ class TodayListViewController: UIViewController {
         setupCollectionView()
         setupNavigationBar()
         viewModelBindings()
+        collectionViewBindings()
     }
 }
 
@@ -97,6 +100,31 @@ private extension TodayListViewController {
                 cell.configure(viewModel)
             }
             .disposed(by: disposeBag)
+    }
+    
+    func collectionViewBindings() {
+        collectionView.rx.modelSelected(ArticleViewModel.self)
+            .subscribe(onNext: { [weak self] viewModel in
+                self?.detailNavigator.navigateToArticle(with: viewModel)
+            })
+            .disposed(by: disposeBag)
         
+        collectionView.rx.itemHighlighted
+            .subscribe(onNext: { [weak self] index in
+                let cell = self?.collectionView.cellForItem(at: index)
+                UIView.animate(withDuration: 0.2, animations: {
+                    cell?.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+                })
+            })
+            .disposed(by: disposeBag)
+        
+        collectionView.rx.itemUnhighlighted
+            .subscribe(onNext: { [weak self] index in
+                let cell = self?.collectionView.cellForItem(at: index)
+                UIView.animate(withDuration: 0.35, animations: {
+                    cell?.transform = CGAffineTransform(scaleX: 1, y: 1)
+                })
+            })
+            .disposed(by: disposeBag)
     }
 }

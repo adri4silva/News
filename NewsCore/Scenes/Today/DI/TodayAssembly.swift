@@ -10,17 +10,27 @@ import Foundation
 
 public final class TodayAssembly {
     
-    private let webServiceAssembly: WebServiceAssembly
+    private let repositoryAssembly: RepositoryAssembly
+    private let detailAssembly: DetailAssembly
     
-    public init(webServiceAssembly: WebServiceAssembly) {
-        self.webServiceAssembly = webServiceAssembly
+    public init(repositoryAssembly: RepositoryAssembly, detailAssembly: DetailAssembly) {
+        self.repositoryAssembly = repositoryAssembly
+        self.detailAssembly = detailAssembly
     }
     
     public func viewController() -> UIViewController {
-        return TodayListViewController(viewModel: viewModel())
+        return TodayListViewController(viewModel: viewModel(), detailNavigator: detailNavigator())
     }
     
     internal func viewModel() -> TodayListViewModelType {
-        return TodayListViewModel(client: webServiceAssembly.newsClient(), request: webServiceAssembly.articleRequest())
+        return TodayListViewModel(todayRepository: repository())
+    }
+    
+    internal func repository() -> TodayRepositoryProtocol {
+        return TodayRepository(repository: repositoryAssembly.repository)
+    }
+    
+    internal func detailNavigator() -> DetailNavigatorProtocol {
+        return detailAssembly.detailNavigator
     }
 }

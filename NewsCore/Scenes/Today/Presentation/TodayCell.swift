@@ -78,7 +78,7 @@ class TodayCell: UICollectionViewCell {
         authorLabel.text = nil
     }
     
-    func configure(_ viewModel: TodayCellViewModel) {
+    func configure(_ viewModel: ArticleViewModel) {
         viewModel.title
             .bind(to: titleLabel.rx.text)
             .disposed(by: disposeBag)
