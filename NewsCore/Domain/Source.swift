@@ -12,3 +12,5 @@ public struct Source: Codable {
     let id: String?
     let name: String
 }
+
+extension Source: Equatable {}

@@ -9,6 +9,7 @@
 import Foundation
 
 public struct Article: Codable {
+    let identifier: String = UUID().uuidString.lowercased()
     let source: Source
     let author: String?
     let title: String
@@ -16,5 +17,11 @@ public struct Article: Codable {
     let url: String
     let urlToImage: String?
     let publishedAt: String?
-    let content: String
+    let content: String?
+}
+
+extension Article: Equatable {
+    public static func == (lhs: Article, rhs: Article) -> Bool {
+        return lhs.source == rhs.source && lhs.author == rhs.author && lhs.title == rhs.title && lhs.description == rhs.description && lhs.url == rhs.url
+    }
 }
