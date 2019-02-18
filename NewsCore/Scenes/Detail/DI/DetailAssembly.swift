@@ -21,6 +21,6 @@ public final class DetailAssembly {
 
 extension DetailAssembly: DetailViewControllerProvider {
     func detailViewController(with viewModel: ArticleViewModel) -> UIViewController {
-        return DetailViewController(viewModel: viewModel)
+        return DetailViewController(detailNavigator: detailNavigator, viewModel: viewModel)
     }
 }

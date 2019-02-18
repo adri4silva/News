@@ -45,7 +45,7 @@ class TodayListViewController: UIViewController {
     
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.backgroundColor = .gray
+        collectionView.backgroundColor = .backgroundWhite
         return collectionView
     }()
     

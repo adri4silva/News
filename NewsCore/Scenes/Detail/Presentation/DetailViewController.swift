@@ -18,12 +18,14 @@ class DetailViewController: UIViewController {
     
     // MARK: - Private properties
     private let viewModel: ArticleViewModelType
+    private let detailNavigator: DetailNavigator
     
     private let disposeBag = DisposeBag()
     
     // MARK: - Initializers
-    init(viewModel: ArticleViewModelType) {
+    init(detailNavigator: DetailNavigator, viewModel: ArticleViewModelType) {
         self.viewModel = viewModel
+        self.detailNavigator = detailNavigator
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -96,7 +98,7 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
+        view.backgroundColor = .backgroundWhite
 
         setupUI()
         
@@ -104,9 +106,13 @@ class DetailViewController: UIViewController {
         
         closeButton.rx.tap
             .bind { [weak self] in
-                self?.dismiss(animated: true, completion: nil)
+                self?.detailNavigator.dismiss(completion: nil)
             }
             .disposed(by: disposeBag)
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
 }
 
