@@ -15,3 +15,7 @@ The differences with Swinject are minimal. We have all the advantages of a depen
 
 ### Navigator:
 Navigators are responsible for navigating to a scene. They need the providers in order to provide the instances of the scenes. If the providers did not exist and, considering that we can't inject assemblies directly to the objects of the application, we would be attaching the navigator with the dependencies of the scenes. Keep in mind that the navigator could be used in more than one scene.
+
+## Credits
+
+The project architecture is inspired by the MVP architecture seen in the Architecture Course given by [Guillermo](https://github.com/gonzalezreal).
