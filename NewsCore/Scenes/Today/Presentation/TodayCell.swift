@@ -80,15 +80,15 @@ class TodayCell: UICollectionViewCell {
     
     func configure(_ viewModel: ArticleViewModel) {
         viewModel.title
-            .bind(to: titleLabel.rx.text)
+            .drive(titleLabel.rx.text)
             .disposed(by: disposeBag)
         
         viewModel.author
-            .bind(to: authorLabel.rx.text)
+            .drive(authorLabel.rx.text)
             .disposed(by: disposeBag)
         
         viewModel.image
-            .bind(to: titleImageView.rx.image)
+            .drive(titleImageView.rx.image)
             .disposed(by: disposeBag)
     }
 }

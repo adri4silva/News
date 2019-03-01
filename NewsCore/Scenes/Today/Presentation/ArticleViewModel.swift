@@ -17,11 +17,11 @@ protocol ArticleViewModelInputs {
 }
 
 protocol ArticleViewModelOutputs {
-    var image: BehaviorRelay<UIImage> { get }
-    var title: Observable<String> { get }
-    var author: Observable<String?> { get }
-    var date: Observable<String?> { get }
-    var content: Observable<String?> { get }
+    var image: Driver<UIImage> { get }
+    var title: Driver<String> { get }
+    var author: Driver<String?> { get }
+    var date: Driver<String?> { get }
+    var content: Driver<String?> { get }
 }
 
 protocol ArticleViewModelType {
@@ -30,30 +30,29 @@ protocol ArticleViewModelType {
 }
 
 final class ArticleViewModel {
-    let image: BehaviorRelay<UIImage> = BehaviorRelay(value: UIImage())
-    let title: Observable<String>
-    let author: Observable<String?>
-    let date: Observable<String?>
-    let content: Observable<String?>
+    var image: Driver<UIImage> = Driver.empty()
+    let title: Driver<String>
+    let author: Driver<String?>
+    let date: Driver<String?>
+    let content: Driver<String?>
     
     private lazy var disposeBag = DisposeBag()
     
     init(article: Article) {
-        self.title = Observable.just(article.title)
-        self.author = Observable.just(article.author)
-        self.date = Observable.just(article.publishedAt)
-        self.content = Observable.just(article.content)
-        
-        image(for: article.urlToImage)
-            .bind(to: image)
-            .disposed(by: disposeBag)
+        self.title = Driver.just(article.title)
+        self.author = Driver.just(article.author)
+        self.date = Driver.just(article.publishedAt)
+        self.content = Driver.just(article.content)
+        self.image = Driver<UIImage>.deferred {
+            self.image(for: article.urlToImage)
+        }
     }
 }
 
 private extension ArticleViewModel {
-    func image(for url: String?) -> Observable<UIImage> {
-        guard let imageString = url, let imageUrl = URL(string: imageString) else { return Observable.empty() }
-        return KingfisherManager.shared.rx.retrieveImage(with: imageUrl).asObservable()
+    func image(for url: String?) -> Driver<UIImage> {
+        guard let imageString = url, let imageUrl = URL(string: imageString) else { return Driver.empty() }
+        return KingfisherManager.shared.rx.retrieveImage(with: imageUrl).asDriver(onErrorJustReturn: UIImage())
     }
 }
 

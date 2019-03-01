@@ -16,7 +16,8 @@ protocol TodayListViewModelInputs {
 }
 
 protocol TodayListViewModelOutputs {
-    var articles: Observable<[ArticleViewModel]> { get }
+    var articles: Driver<[ArticleViewModel]> { get }
+    var isLoading: Observable<Bool> { get }
 }
 
 protocol TodayListViewModelType {
@@ -26,14 +27,16 @@ protocol TodayListViewModelType {
 
 final class TodayListViewModel {
 
-    let articles: Observable<[ArticleViewModel]>
+    let articles: Driver<[ArticleViewModel]>
+    let isLoading: Observable<Bool>
     
     init(todayRepository: TodayRepositoryProtocol) {
         self.articles = todayRepository.todayCellViewModels(country: "us",
                                                             category: "",
                                                             date: "",
                                                             pageSize: "10",
-                                                            page: "1")
+                                                            page: "1").asDriver(onErrorJustReturn: [])
+        self.isLoading = articles.asObservable().map { $0.isEmpty }
     }
 }
 

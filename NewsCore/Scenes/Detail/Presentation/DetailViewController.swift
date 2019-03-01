@@ -148,23 +148,23 @@ private extension DetailViewController {
     
     func bindViewModel() {
         viewModel.outputs.image
-            .bind(to: articleImageView.rx.image)
+            .drive(articleImageView.rx.image)
             .disposed(by: disposeBag)
         
         viewModel.outputs.author
-            .bind(to: authorLabel.rx.text)
+            .drive(authorLabel.rx.text)
             .disposed(by: disposeBag)
         
         viewModel.outputs.title
-            .bind(to: titleLabel.rx.text)
+            .drive(titleLabel.rx.text)
             .disposed(by: disposeBag)
         
         viewModel.outputs.date
-            .bind(to: dateLabel.rx.text)
+            .drive(dateLabel.rx.text)
             .disposed(by: disposeBag)
         
         viewModel.outputs.content
-            .bind(to: contentTextView.rx.text)
+            .drive(contentTextView.rx.text)
             .disposed(by: disposeBag)
     }
 }

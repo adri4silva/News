@@ -94,11 +94,15 @@ private extension TodayListViewController {
 private extension TodayListViewController {
     func viewModelBindings() {
         viewModel.outputs.articles
-            .bind(to: collectionView.rx.items(cellIdentifier: Constants.cellName))
+            .drive(collectionView.rx.items(cellIdentifier: Constants.cellName))
             { _, viewModel, cell in
                 let cell = cell as! TodayCell
                 cell.configure(viewModel)
             }
+            .disposed(by: disposeBag)
+        
+        viewModel.outputs.isLoading
+            .bind(to: activityIndicator.rx.isAnimating)
             .disposed(by: disposeBag)
     }
     
